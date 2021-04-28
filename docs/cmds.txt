@@ -1,3 +1,20 @@
+---Set up react project---
 npm install -g create-react-app
 npx create-react-app wss-test
 npm start
+
+---Push it to Git---
+Create New Repository in GIT 
+git init
+git status 
+git stage .
+git commit -m "init commit"
+git remote add origin https://github.com/Sumitvedpathak/wss-test.git
+git branch -M main
+git push -u origin main
+
+
+---Bootstrap ---
+https://websitesetup.org/bootstrap-tutorial-for-beginners/
+https://account.mobirise.com/#/
+https://pingendo.com/

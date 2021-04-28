@@ -1,17 +1,41 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './resource/index.css';
-import App from './App';
-// import reportWebVitals from './web-vitals/reportWebVitals';
+const express = require('express')
+const http = require('http')
+const path = require('path')
+const socketio = require('socket.io')
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const app = express()
+const server = http.createServer(app)
+const io = socketio(server)
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-// reportWebVitals();
+const port = process.env.PORT || 3000
+
+const publicDirPath = path.join(__dirname,'../public')
+
+app.use(express.static(publicDirPath))
+
+let count=0
+
+io.on('connection', (socket) => {
+    console.log('New Socket connection')
+
+    // socket.emit('countUpdated',count)
+
+    // socket.on('increment', () => {
+    //     count++
+    //     //socket.emit('countUpdated',count) //emits only to a specific client
+    //     io.emit('countUpdated',count)
+    // })
+
+    socket.emit('message','Welcome!')
+    socket.broadcast.emit('message','New user joinied')
+    socket.on('sendMessage', (data) => {
+        io.emit('message', data)
+    })
+    socket.on('disconnect', () => {
+        io.emit('message','User has left')
+    })
+})
+
+server.listen(port, () => {
+     console.log('Port listening on ' + port)
+})
